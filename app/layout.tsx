@@ -15,6 +15,7 @@ import { Provider, useSelector } from "react-redux";
 import ModeToggle from "@/src/components/extras/ModeToggle"; // Adjust the import path as necessary
 import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
 import { RootState, store } from "@/src/store"; // Import RootState and store
+import Head from 'next/head'; // Import Head from next/head
 
 // Configure Font Awesome to prevent automatic CSS injection
 config.autoAddCss = false;
@@ -80,6 +81,10 @@ export default function RootLayout({
   return (
     <Provider store={store}>
       <html lang="en">
+        <Head>
+          <link rel="icon" href="/images/favicon.ico" />
+          {/* Add any other head tags here */}
+        </Head>
         <body className={inter.className}>
           <ThemeWrapper>
             <div className="dark:bg-gray-900">
