@@ -1,0 +1,51 @@
+1. Finalize Express server basics
+Fix all TS errors in server.
+Confirm server boots and basic health route works: GET /health.
+
+2. Switch Express DB from current DB → Neon Postgres
+Pick one: Prisma (recommended), Drizzle, or pg.
+Add Neon connection URL to .env.
+Define Postgres schema (users, movies, watchlist, etc.).
+Implement models/repositories and test simple CRUD from Express.
+
+3. Finish custom auth in Express
+Routes: POST /auth/signup, POST /auth/login, POST /auth/logout (optional), GET /auth/me.
+Use bcrypt for passwords, JWT for tokens.
+Add authMiddleware to validate JWT and attach req.user.
+Protect routes that need auth (e.g. watchlist, profile).
+
+4. Mirror Supabase/Next API features in Express
+List all features currently using Supabase/Next API (e.g. movies list, user lists, favorites).
+For each feature, create matching Express route(s) and handlers.
+Test backend with Postman/Thunder Client before touching frontend.
+
+5. Wire Next.js frontend to Express instead of Supabase
+Add NEXT_PUBLIC_API_URL (Express base URL) to .env.local.
+Replace Supabase calls with fetch/axios to Express endpoints.
+Create a small API layer (e.g. client/lib/api.ts) to keep calls in one place.
+
+6. Replace Supabase auth with custom auth on the frontend
+Create an AuthContext or hook that:
+Calls /auth/login and /auth/signup.
+Stores JWT (HTTP-only cookie preferred; otherwise localStorage).
+Exposes user, login, logout, isAuthenticated.
+Update protected pages/guards to use this instead of Supabase auth.
+
+7. Gradually stop using Next.js API routes
+For each Next API route:
+Confirm equivalent Express route exists and is wired in frontend.
+Remove the Next API handler file.
+When all moved, you should have zero use of /pages/api or app/api.
+
+8. Remove Supabase completely
+Delete Supabase client setup files.
+Remove Supabase env vars and NPM packages.
+Clean any leftover types/hooks related to Supabase.
+
+9. Dev & build setup
+Add root scripts to run both servers in dev (e.g. concurrently "npm run dev:client" "npm run dev:server").
+Decide prod setup: same domain via reverse proxy (/api → Express) or separate domains.
+
+10. Cleanup & docs
+Remove unused code + configs.
+Add a short README section describing the new stack and architecture (for your resume/portfolio).
