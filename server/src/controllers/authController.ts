@@ -1,7 +1,9 @@
 import { prisma } from '../config/db';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import { generateToken, AUTH_COOKIE_NAME } from '../utils/generateToken';
 import { Request, Response } from 'express';
+import { googleClient } from '../utils/googleAuth';
 
 const signup = async (req: Request, res: Response) => {
   try {
@@ -48,6 +50,7 @@ const signup = async (req: Request, res: Response) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        picture: user.picture,
       },
       token,
     });
@@ -101,6 +104,7 @@ const login = async (req: Request, res: Response) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        picture: user.picture,
       },
       token,
     });
@@ -113,7 +117,6 @@ const login = async (req: Request, res: Response) => {
 };
 
 const logout = async (req: Request, res: Response) => {
-
   // remove the jwt from cookies
   res.cookie(AUTH_COOKIE_NAME, '', {
     httpOnly: true,
@@ -128,4 +131,95 @@ const logout = async (req: Request, res: Response) => {
   });
 };
 
-export { signup, login, logout };
+const getMe = async (req: any, res: Response) => {
+  // req.user is populated by the protect middleware
+  const user = req.user;
+
+  if (!user) {
+    return res.status(401).json({
+      status: 'error',
+      error: 'Not authorized',
+    });
+  }
+
+  return res.status(200).json({
+    status: 'success',
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      picture: user.picture,
+    },
+  });
+};
+
+const googleAuthInit = async (req: Request, res: Response) => {
+  console.log('DEBUG_OAUTH_ENV', {
+    client_id: process.env.GOOGLE_CLIENT_ID,
+    redirect_uri: process.env.GOOGLE_REDIRECT_URL,
+    client: googleClient._clientId,
+  });
+
+  const url = googleClient.generateAuthUrl({
+    access_type: 'offline',
+    scope: ['profile', 'email'],
+    prompt: 'consent',
+  });
+  res.redirect(url);
+};
+
+const googleAuthCallback = async (req: Request, res: Response) => {
+  try {
+    const code = req.query.code as string;
+    if (!code) {
+      return res.status(400).json({ error: 'OAuth code missing' });
+    }
+
+    const { tokens } = await googleClient.getToken(code);
+    googleClient.setCredentials(tokens);
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: tokens.id_token as string,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload || !payload.email) {
+      return res
+        .status(400)
+        .json({ error: 'Failed to retrieve email from Google' });
+    }
+
+    const email = payload.email.toLowerCase();
+    const name = payload.name || 'Google User';
+    const picture = payload.picture || '';
+
+    let user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      const randomPassword = crypto.randomBytes(16).toString('hex');
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(randomPassword, salt);
+
+      user = await prisma.user.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword,
+          picture,
+        },
+      });
+    }
+
+    generateToken(user.id, res);
+
+    const frontendUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+    return res.redirect(frontendUrl);
+  } catch (error) {
+    console.error('Error in Google OAuth:', error);
+    const frontendUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+    return res.redirect(`${frontendUrl}/?error=oauth_failed`);
+  }
+};
+
+export { signup, login, logout, getMe, googleAuthInit, googleAuthCallback };

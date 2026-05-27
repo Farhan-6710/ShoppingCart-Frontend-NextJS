@@ -11,6 +11,7 @@ model User {
   name      String
   email     String   @unique
   password  String
+  picture   String?  @default("")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
