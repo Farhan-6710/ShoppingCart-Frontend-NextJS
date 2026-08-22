@@ -55,7 +55,7 @@ UI event
               → services/*Api + axiosInstance
                   → Express (cookie JWT)
                       → Prisma
-                          → PostgreSQL
+                          → Neon (PostgreSQL)
 ```
 
 - **Catalog:** `useProductsQuery` → `GET /products`. Details: `getProduct` / `getAllProductNames` → `GET /products/:itemName` and `/names`.

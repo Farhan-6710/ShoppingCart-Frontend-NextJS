@@ -19,7 +19,7 @@ The UI calls Express over Axios (`withCredentials: true`). JWT is stored in an H
 
 **Client:** Next.js 16, React 19, TypeScript, Tailwind CSS v4, shadcn/ui (New York), next-themes, Redux Toolkit, Redux Saga, redux-persist, TanStack Query, Axios, Framer Motion, Sonner.
 
-**Server:** Express 5, TypeScript, Prisma 7, PostgreSQL (`@prisma/adapter-pg`), JWT (`jsonwebtoken`, `cookie-parser`), bcryptjs, Google OAuth (`google-auth-library`). ESLint, Prettier, Jest (configured; no tests).
+**Server:** Express 5, TypeScript, Prisma 7, Neon (PostgreSQL) via `DATABASE_URL` and `@prisma/adapter-pg`, JWT (`jsonwebtoken`, `cookie-parser`), bcryptjs, Google OAuth (`google-auth-library`). ESLint, Prettier, Jest (configured; no tests).
 
 **Assistant:** OpenRouter chat completions from the client (`useAiAssistant`).
 
@@ -48,7 +48,7 @@ server/
 
 ```
 UI → hooks / AuthContext / Redux
-       → services (Axios) → Express routes → controllers → Prisma → PostgreSQL
+       → services (Axios) → Express routes → controllers → Prisma → Neon (PostgreSQL)
 AI sheet → OpenRouter
 ```
 
@@ -125,3 +125,15 @@ npm run dev
 **Client:** `dev`, `build`, `start`, `lint`, `seed` (Supabase insert from `scripts/seed-products.ts`).
 
 **Server:** `dev` (nodemon + ts-node), `build` (`prisma generate` + `tsc`), `start` (`node dist/server.js`), `lint`, `test`, `test:watch`, `seed:products`.
+
+## Deploy
+
+Axios calls `process.env.NEXT_PUBLIC_SERVER_URL` (see `client/src/constants/api.ts`). That value is baked in at Vercel build time. The live bundle uses Render.
+
+| Piece | Platform | URL |
+| --- | --- | --- |
+| Client | Vercel | https://shopnow-lilac.vercel.app/ |
+| API | Render | https://shopnow-backend-h1os.onrender.com |
+| Database | Neon (PostgreSQL) | `DATABASE_URL` |
+
+`GET /health` on the API returns `{ "status": "ok" }` with CORS origin `https://shopnow-lilac.vercel.app`. Local fallback is `http://localhost:5001`. No `vercel.json`, Render blueprint, or Docker files are in this repo.
