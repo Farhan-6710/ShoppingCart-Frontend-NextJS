@@ -1,0 +1,55 @@
+"use client";
+
+import { ProductFilterValues } from "@/types/filterProduct";
+import React from "react";
+import { FilterSheet } from "./FilterSheet";
+import FiltersSidebarContent from "./FiltersSidebarContent";
+import SearchBar from "@/components/headers/headerTwo/SearchBar";
+import { motion } from "framer-motion";
+import { Product } from "@/types/product";
+
+interface ProductsFiltersPanelProps {
+  products: Product[];
+  filterValues: ProductFilterValues;
+  onToggleCategory: (category: string) => void;
+  onTogglePriceRange: (priceRange: string) => void;
+  onToggleColor: (color: string) => void;
+  onSortByPrice: (order: "asc" | "desc") => void;
+  onResetFilters: () => void;
+}
+
+const ProductsFiltersPanel = ({
+  products,
+  ...props
+}: ProductsFiltersPanelProps) => {
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <motion.aside
+        initial={{ opacity: 0, x: -180 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{
+          duration: 0.2,
+          ease: "easeOut",
+        }}
+        style={{ position: "sticky", top: "var(--header-height, 0px)" }}
+        className="w-70 bg-card hidden md:flex md:flex-col border-r border-border p-6 pb-6 pt-4 xl:pt-6 h-[calc(100vh-var(--header-height,0px))]"
+        aria-label="Product filters"
+      >
+        <FiltersSidebarContent {...props} />
+      </motion.aside>
+
+      {/* Mobile Sheet */}
+      <div
+        className="flex flex-col gap-3 md:hidden p-4 pb-0 pt-4"
+        role="region"
+        aria-label="Filter controls"
+      >
+        <SearchBar products={products} />
+        <FilterSheet {...props} />
+      </div>
+    </>
+  );
+};
+
+export default React.memo(ProductsFiltersPanel);

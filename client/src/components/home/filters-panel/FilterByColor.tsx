@@ -1,0 +1,42 @@
+import { CHECKBOX_CLASSES } from "@/constants/filters";
+
+interface FilterByColorProps {
+  colorOptions: string[];
+  selectedColors: string[];
+  onToggleColor: (color: string) => void;
+}
+
+const FilterByColor = ({
+  colorOptions,
+  selectedColors,
+  onToggleColor,
+}: FilterByColorProps) => {
+  return (
+    <div className="filter-div mb-4">
+      <h3 className="text-md font-semibold text-gray-800 dark:text-gray-100 mb-2">
+        Filter by Color
+      </h3>
+      <div className="flex flex-wrap gap-3">
+        {colorOptions.map((color) => (
+          <label key={color} className="flex items-center cursor-pointer">
+            <div className="flex flex-col justify-center items-center gap-1.5">
+              <input
+                type="checkbox"
+                checked={selectedColors.includes(color)}
+                onChange={() => onToggleColor(color)}
+                className={CHECKBOX_CLASSES}
+                aria-label={`Filter by color ${color}`}
+              />
+              <span
+                className="h-5 w-5 rounded-full border border-gray-300 dark:border-gray-600"
+                style={{ backgroundColor: color }}
+              />
+            </div>
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default FilterByColor;

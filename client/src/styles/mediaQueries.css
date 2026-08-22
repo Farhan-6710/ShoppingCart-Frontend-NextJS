@@ -1,0 +1,89 @@
+/* Media Queries - Mobile First Approach */
+
+/* ===================================
+   BASE / MOBILE (default, no media query needed)
+   =================================== */
+.logo-image {
+  width: 200px;
+  height: auto;
+}
+
+.fixed-container {
+  position: fixed;
+  top: 176px; /* 148px header + 28px offset */
+}
+
+/* globals.css */
+.marquee-container {
+  overflow: hidden;
+  position: relative;
+  white-space: nowrap;
+}
+
+.marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 17s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(116%);
+  }
+  100% {
+    transform: translateX(-116%);
+  }
+}
+
+/* ===================================
+   TABLET (min-width: 768px)
+   =================================== */
+@media (min-width: 768px) {
+
+  .fixed-container {
+    top: 220px;
+  }
+
+  .sticky-filter-sidebar {
+    position: sticky;
+    top: 117px; /* Match header height */
+    z-index: 0;
+  }
+}
+
+/* ===================================
+   DESKTOP (min-width: 1024px)
+   =================================== */
+@media (min-width: 1024px) {
+
+  .sticky-filter-sidebar {
+    top: 118px; /* Match desktop header height */
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(156%);
+    }
+    100% {
+      transform: translateX(-140%);
+    }
+  }
+}
+
+/* ===================================
+   LARGE SCREENS (min-width: 1536px)
+   =================================== */
+@media (min-width: 1536px) {
+  .marquee {
+    animation: marquee-mobile 12s linear infinite;
+  }
+
+  @keyframes marquee-mobile {
+    0% {
+      transform: translateX(150%);
+    }
+    100% {
+      transform: translateX(-129%);
+    }
+  }
+}
