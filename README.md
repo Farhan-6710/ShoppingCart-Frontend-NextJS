@@ -6,10 +6,10 @@ ShopNow is a shoe storefront: browse and filter products, open product pages, ma
 
 This repo is two packages with no root workspace:
 
-| Package | Role | Dev URL |
-| --- | --- | --- |
+| Package   | Role                  | Dev URL                 |
+| --------- | --------------------- | ----------------------- |
 | `client/` | Next.js App Router UI | `http://localhost:3000` |
-| `server/` | Express REST API | `http://localhost:5001` |
+| `server/` | Express REST API      | `http://localhost:5001` |
 
 The UI calls Express over Axios (`withCredentials: true`). JWT is stored in an HttpOnly cookie. Guest cart/wishlist live in Redux Persist (`localStorage`) and sync to the API after login.
 
@@ -130,10 +130,10 @@ npm run dev
 
 Axios calls `process.env.NEXT_PUBLIC_SERVER_URL` (see `client/src/constants/api.ts`). That value is baked in at Vercel build time. The live bundle uses Render.
 
-| Piece | Platform | URL |
-| --- | --- | --- |
-| Client | Vercel | https://shopnow-lilac.vercel.app/ |
-| API | Render | https://shopnow-backend-h1os.onrender.com |
-| Database | Neon (PostgreSQL) | `DATABASE_URL` |
+| Piece    | Platform          | URL                                       |
+| -------- | ----------------- | ----------------------------------------- |
+| Client   | Vercel            | https://shopnow-lilac.vercel.app/         |
+| API      | Render            | https://shopnow-backend-h1os.onrender.com |
+| Database | Neon (PostgreSQL) | `DATABASE_URL`                            |
 
 `GET /health` on the API returns `{ "status": "ok" }` with CORS origin `https://shopnow-lilac.vercel.app`. Local fallback is `http://localhost:5001`. No `vercel.json`, Render blueprint, or Docker files are in this repo.

@@ -14,12 +14,12 @@
 
 Tokens live in `client/src/styles/globals.css`. `:root` and `.dark` set semantic CSS variables; `@theme inline` maps them to Tailwind v4 utilities.
 
-| Group | Tokens |
-| --- | --- |
+| Group   | Tokens                                                                                                      |
+| ------- | ----------------------------------------------------------------------------------------------------------- |
 | Surface | `--background`, `--foreground`, `--card`, `--popover`, `--muted`, `--accent`, `--sidebar` (+ `-foreground`) |
-| Brand | `--primary` (warm gold), `--secondary`, `--destructive`, `--ring` |
-| Chrome | `--border`, `--input`, `--radius` (`0.6rem`), shadow scale |
-| Type | `--font-sans` → Inter, `--font-serif` / body → Convergence (`font-convergence`) |
+| Brand   | `--primary` (warm gold), `--secondary`, `--destructive`, `--ring`                                           |
+| Chrome  | `--border`, `--input`, `--radius` (`0.6rem`), shadow scale                                                  |
+| Type    | `--font-sans` → Inter, `--font-serif` / body → Convergence (`font-convergence`)                             |
 
 shadcn/ui **New York**, `baseColor: neutral`, CSS variables, Lucide (`client/components.json`). Primitives in `components/ui/` (button CVA variants, dialog, sheet, drawer, select, dropdown, command, avatar, skeleton, sonner, spinner). Compose with `cn()` from `lib/utils`. Extra motion and layout CSS: `globals.css`, `mediaQueries.css`. Breakpoints include `--breakpoint-xs: 475px` and `--breakpoint-2xl: 1450px`. Product tags use light/dark palettes in `utils/products/products.ts`.
 
@@ -34,14 +34,14 @@ shadcn/ui **New York**, `baseColor: neutral`, CSS variables, Lucide (`client/com
 
 `layout.tsx` → `LayoutClient`: providers, `Header` (`HeaderOne` + `HeaderTwo` + `Sidebar`), `ModeToggle`, page, `Footer` + `FooterTwo`, `ScrollToTop`, `Toaster`.
 
-| Screen | Composition |
-| --- | --- |
-| Home | `ProductsLayout` → `ProductsFiltersPanel` (`FiltersSidebarContent` / `FilterSheet`) + `ProductsGrid` → `VirtualizedProductList` → `ProductCard` |
-| Product | Server page loads product → `ProductDetailsPageClient` → `ProductDetailsCard` (carousel, tags, `ProductActions`) |
-| Cart | `CartSection` → header, list, coupon, order summary, payment methods |
-| Wishlist | `WishlistSection` → header, list or empty |
-| Auth | `Modal` + `LoginForm` / `SignUpForm` |
-| Assistant | Header `Sheet` → `AiAssistant` (header, chat, welcome, footer) |
+| Screen    | Composition                                                                                                                                     |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Home      | `ProductsLayout` → `ProductsFiltersPanel` (`FiltersSidebarContent` / `FilterSheet`) + `ProductsGrid` → `VirtualizedProductList` → `ProductCard` |
+| Product   | Server page loads product → `ProductDetailsPageClient` → `ProductDetailsCard` (carousel, tags, `ProductActions`)                                |
+| Cart      | `CartSection` → header, list, coupon, order summary, payment methods                                                                            |
+| Wishlist  | `WishlistSection` → header, list or empty                                                                                                       |
+| Auth      | `Modal` + `LoginForm` / `SignUpForm`                                                                                                            |
+| Assistant | Header `Sheet` → `AiAssistant` (header, chat, welcome, footer)                                                                                  |
 
 Logic stays in hooks (`useFilterProducts`, `useCartManagement`, `useProductsQuery`, `useSearchProduct`, `useAiAssistant`). Pages should not grow into feature implementations.
 
