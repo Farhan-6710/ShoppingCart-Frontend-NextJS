@@ -130,10 +130,10 @@ npm run dev
 
 Axios calls `process.env.NEXT_PUBLIC_SERVER_URL` (see `client/src/constants/api.ts`). That value is baked in at Vercel build time. The live bundle uses Render.
 
-| Piece    | Platform          | URL                                       |
-| -------- | ----------------- | ----------------------------------------- |
-| Client   | Vercel            | https://shopnow-lilac.vercel.app/         |
-| API      | Render            | https://shopnow-backend-h1os.onrender.com |
-| Database | Neon (PostgreSQL) | `DATABASE_URL`                            |
+| Piece    | Platform          | URL                                       | Account |
+| -------- | ----------------- | ----------------------------------------- | ------- |
+| Client   | Vercel            | https://shopnow-lilac.vercel.app/         | main — `itz.me.**********@gmail.com` |
+| API      | Render            | https://shopnow-backend-h1os.onrender.com | main — `itz.me.**********@gmail.com` |
+| Database | Neon (PostgreSQL) | `DATABASE_URL`                            | — |
 
 `GET /health` on the API returns `{ "status": "ok" }` with CORS origin `https://shopnow-lilac.vercel.app`. Local fallback is `http://localhost:5001`. No `vercel.json`, Render blueprint, or Docker files are in this repo.
