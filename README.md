@@ -1,3 +1,5 @@
+![ShopNow Banner](./client/public/images/app-screenshot.png)
+
 # ShopNow
 
 ShopNow is a shoe storefront: browse and filter products, open product pages, manage cart and wishlist, sign in, and ask an in-page assistant about products.
